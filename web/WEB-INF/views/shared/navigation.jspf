@@ -1,0 +1,9 @@
+<%@ page pageEncoding="UTF-8" %>
+<aside class="workspace-sidebar" id="navigation" aria-label="Điều hướng chính">
+<button type="button" class="mobile-nav-close icon-button" aria-label="Đóng menu">×</button>
+<a class="workspace-brand" href="<%=base%>/dashboard"><span class="brand-mark">S</span><span>SmartStu<small>HỌC VẬT LÝ · HIỂU THẾ GIỚI</small></span></a>
+<div class="role-chip"><span class="role-dot"></span><%=ViewSupport.h(layout.roleLabel())%><span class="role-subject">Vật lý 10</span></div>
+<div class="nav-caption"><%=viewer.getRole()==Role.STUDENT?"KHÔNG GIAN HỌC TẬP":"KHÔNG GIAN LÀM VIỆC"%></div>
+<nav class="workspace-nav"><%for(LayoutModel.NavigationItem nav:layout.navigation()){%><a href="<%=base%>/<%=nav.key()%>" <%=nav.active()?"class=\"active\" aria-current=\"page\"":""%>><svg class="nav-icon" aria-hidden="true" focusable="false"><use href="${pageContext.request.contextPath}/assets/icons.svg#<%=nav.icon()%>"></use></svg><span><%=ViewSupport.h(nav.label())%></span></a><%}%></nav>
+<div class="sidebar-bottom"><a href="${pageContext.request.contextPath}/logout?csrf=<%=ViewSupport.csrf(request)%>" class="logout-link"><svg class="nav-icon" aria-hidden="true"><use href="${pageContext.request.contextPath}/assets/icons.svg#logout"></use></svg>Đăng xuất</a></div>
+</aside><button class="nav-backdrop" aria-label="Đóng điều hướng" hidden></button>

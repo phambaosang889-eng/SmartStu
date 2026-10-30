@@ -1,0 +1,97 @@
+/* Presentation layer: quiet blue surfaces, clear navigation and consistent rhythm. */
+/* Desktop readability pass: keep the established blue visual system. */
+:root { --radius: 15px; --shadow: 0 4px 18px rgba(31, 70, 101, .035); }
+.workspace { background: #f6f9fc; }
+.workspace-sidebar { padding: 25px 17px 17px; border-right-color: #e8eef5; }
+.workspace-brand { gap: 12px; padding: 0 10px 23px; font-size: 25px; letter-spacing: -.8px; }
+.workspace-brand small { font-size: 7px; letter-spacing: 1.1px; margin-top: 5px; }
+.brand-mark { width: 37px; height: 42px; font-size: 22px; }
+.role-chip { border: 0; background: #f3f8fc; margin: 0 3px 23px; padding: 10px 12px; font-size: 11px; }
+.role-subject { margin-left: auto; color: var(--muted); font-size: 10px; }
+.nav-caption { font-size: 8px; letter-spacing: 1.5px; margin-bottom: 6px; }
+.workspace-nav { gap: 4px; }
+.workspace-nav a { position: relative; padding: 10px 12px; min-height: 43px; font-size: 13px; font-weight: 550; color: #607386; border-radius: 9px; }
+.workspace-nav a:hover { background: #f1f7fc; color: #075f97; }
+.workspace-nav a.active { color: #0679b7; background: #e9f5fe; font-weight: 700; }
+.workspace-nav a.active::before { content: ''; position: absolute; inset: 12px auto 12px 0; width: 3px; border-radius: 4px; background: #0b96d7; }
+.nav-icon { width: 18px; height: 18px; min-width: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.sidebar-bottom { border-top: 1px solid var(--line); margin-top: auto; padding: 17px 12px 0; }
+.logout-link { display: flex; align-items: center; gap: 11px; color: var(--muted); font-size: 12px; }
+.logout-link:hover { color: var(--primary); }
+.workspace-header { height: 74px; min-height: 74px; border-bottom-color: #e9eff5; }
+.breadcrumb { font-size: 12px; }
+.header-user { gap: 12px; }
+.user-avatar { width: 33px; height: 33px; background: #e7f5ff; }
+.workspace-content { max-width: 1390px; padding-top: 31px; }
+.hero { padding: 29px 32px; border: 1px solid #e0edf7; background: linear-gradient(112deg, #fff 4%, #eff8ff 100%); border-radius: 18px; gap: 28px; }
+.hero h1 { font-size: clamp(27px, 2.4vw, 34px); font-weight: 750; letter-spacing: -1px; margin-bottom: 12px; }
+.hero p { font-size: 14px; max-width: 620px; line-height: 1.8; }
+.hero .eyebrow { font-size: 9px; letter-spacing: 1.7px; margin-bottom: 13px; }
+.hero-actions { margin-top: 19px; }
+.hero-symbol { width: 128px; height: 128px; min-width: 128px; outline-width: 13px; margin: 12px 21px; border-color: #a4dafa; }
+.hero-symbol span { font-size: 25px; border-radius: 23px; padding: 22px 16px; box-shadow: 0 8px 28px #0a78b510; }
+.primary, .btn-primary { background: linear-gradient(110deg, #0277b5, #036ba5); box-shadow: 0 4px 10px #0277b518; }
+.primary:hover, .btn-primary:hover { background: #036391; box-shadow: 0 5px 14px #0277b523; }
+.button, .btn { border-radius: 10px; font-size: 13px; min-height: 42px; padding: 9px 15px; }
+.stat-grid { gap: 16px; margin: 23px 0; }
+.stat-card { padding: 20px 22px; border: 1px solid #e5edf4; box-shadow: var(--shadow); }
+.stat-card > span:first-child { font-size: 11px; font-weight: 550; color: #5a6f82; }
+.stat-card strong { font-size: 29px; font-weight: 730; letter-spacing: -.9px; margin: 9px 0 6px; line-height: 1.4; }
+.stat-card > span:last-child { font-size: 10px; color: #7a8b99; line-height: 1.6; }
+.surface, .resource-card { border-color: #e3ebf3; box-shadow: var(--shadow); }
+.surface h2 { font-size: 18px; font-weight: 700; }
+.surface > p { font-size: 14px; }
+.resource-card { border-radius: 15px; transition: border-color .16s, box-shadow .16s; }
+.resource-card:hover { border-color: #aed7ef; box-shadow: 0 9px 25px #0f527909; }
+.resource-card h2 { font-size: 19px; letter-spacing: -.4px; }
+.page-heading p { font-size: 14px; }
+.eyebrow, .topic-label { letter-spacing: 1.2px; }
+.badge { border-radius: 6px; padding: 4px 8px; font-size: 10px; }
+.notice.subtle { padding: 12px 15px; background: #f0f7fd; border-color: #ddebf6; font-size: 12px; box-shadow: none; }
+.connection-dot { width: 7px; height: 7px; min-width: 7px; border-radius: 50%; background: #8b9bac; }
+.toolbar { border-color: #e3ebf3; background: var(--surface); padding: 14px 16px; }
+.question-choice { border-color: #e3ebf3; background: var(--bg); }
+.editor-form { max-width: 920px; }
+.editor-form > h2 { margin-bottom: 22px; }
+.storage-note { margin-top: 24px; color: var(--muted); font-size: 12px; }
+.storage-note summary { padding: 10px 0; }
+.storage-note p { max-width: 680px; font-size: 12px; }
+.workspace-footer { border-top-color: #e7edf3; padding-top: 18px; padding-bottom: 18px; font-size: 10px; }
+.bar-track { background: #f0f6fb; }
+.bar-fill { background: linear-gradient(#56baf0, #0789cb); }
+body[data-theme=dark].workspace { background: var(--bg); }
+body[data-theme=dark] .role-chip, body[data-theme=dark] .workspace-nav a:hover { background: #1d3543; }
+body[data-theme=dark] .workspace-nav a { color: var(--muted); }
+body[data-theme=dark] .workspace-nav a.active { color: #81d0ff; background: #163d56; }
+body[data-theme=dark] .hero { background: linear-gradient(112deg, #192f39, #17374b); border-color: var(--line); }
+body[data-theme=dark] .stat-card, body[data-theme=dark] .surface, body[data-theme=dark] .resource-card { border-color: var(--line); }
+body[data-theme=dark] .stat-card > span { color: var(--muted); }
+body[data-theme=dark] .notice.subtle, body[data-theme=dark] .bar-track { background: #183748; border-color: var(--line); }
+body[data-theme=dark] .user-avatar { background: #224b65; }
+@media(max-width:1200px) { .hero-symbol { width: 108px; height: 108px; min-width: 108px; margin-right: 9px; }.hero-symbol span { font-size: 22px; } }
+@media(max-width:900px) { .workspace-header { min-height: 70px; height: 70px; }.workspace-content { padding-top: 25px; } }
+@media(max-width:600px) {
+  .workspace-content { padding-top: 22px; }.hero { padding: 24px; }.hero h1 { font-size: 28px; }.hero p { font-size: 12px; }.hero-symbol { display: none; }
+  .stat-grid { gap: 10px; }.stat-card { padding: 17px 15px; }.stat-card strong { font-size: 26px; }.stat-card > span:first-child { font-size: 10px; }
+  .surface { padding: 21px; }.workspace-footer { gap: 7px; }.notice.subtle { align-items: flex-start; }.connection-dot { margin-top: 6px; }
+}
+
+.reading .prose{font-size:16px;line-height:1.95;max-width:76ch}.editor-form label{font-size:13px}.video-manager{max-width:920px}.tutor-message-content{font-size:15px;line-height:1.85}.video-add-form .button{width:100%;margin-top:10px}
+
+/* Keep lesson text and its video manager on the same reading/editing column. */
+.workspace-content > .editor-form,
+.workspace-content > .video-manager{width:100%;max-width:920px;margin-left:auto;margin-right:auto;min-width:0;}
+.workspace-content > .editor-form{margin-bottom:24px;}
+.workspace .editor-form input,.workspace .editor-form select,.workspace .editor-form textarea{min-width:0;max-width:100%;font-weight:400;font-size:15px;line-height:1.65;}
+.workspace .editor-form textarea{display:block;width:100%;resize:vertical;min-height:260px;}
+.workspace .editor-form label,.workspace .editor-form .form-grid > *{min-width:0;}
+.workspace .video-manager-grid{align-items:start;}
+.workspace .video-add-form{min-width:0;}
+.workspace .video-add-form input{font-weight:400;}
+.workspace .video-add-form .check-line{font-weight:400;line-height:1.6;gap:10px;}
+.workspace .video-add-form .check-line input{flex:0 0 auto;margin-top:5px;}
+.workspace .video-heading{flex-wrap:wrap;}
+.workspace .video-heading>div{flex:1 1 400px;min-width:0;}
+
+/* Keep the shuffle control centered between the previous/next cards. */
+.flashcard-navigation { justify-content: center; }

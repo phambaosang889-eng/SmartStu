@@ -1,0 +1,2 @@
+<%@ page pageEncoding="UTF-8" %>
+<label>Khóa học<select name="course" required><option value="">Chọn khóa học phụ trách</option><%String essayCourse=error?request.getParameter("course"):assignment==null?"":com.smartstudy.service.CourseService.getInstance().courseOf(assignment.id());for(var c:com.smartstudy.service.CourseService.getInstance().courses(viewer)){%><option value="<%=c.id()%>" <%=c.id().equals(essayCourse)?"selected":""%>><%=ViewSupport.h(c.title())%></option><%}%></select></label>

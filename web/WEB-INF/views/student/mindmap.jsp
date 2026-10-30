@@ -1,0 +1,5 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/WEB-INF/views/shared/start.jspf" %>
+<section class="management-page"><h1>Động lực học Newton</h1><div class="mindmap"><div class="mindmap-center">LỰC VÀ CHUYỂN ĐỘNG</div><div class="mindmap-grid"><article class="panel"><h2>Định luật I</h2><p>Hợp lực bằng 0 → vật đứng yên hoặc chuyển động thẳng đều.</p><b>Quán tính · ΣF = 0</b></article><article class="panel"><h2>Định luật II</h2><p>Hợp lực gây ra gia tốc cùng hướng với lực.</p><b>ΣF = ma</b></article><article class="panel"><h2>Định luật III</h2><p>Lực tương tác xuất hiện thành cặp, cùng độ lớn, ngược chiều, tác dụng lên hai vật.</p><b>F₁₂ = −F₂₁</b></article><article class="panel"><h2>Lực ma sát</h2><p>Cản trở chuyển động tương đối giữa các bề mặt tiếp xúc.</p><b>Fms trượt = μN</b></article></div></div><a class="btn btn-primary" href="${pageContext.request.contextPath}/student/formulas">Mở sổ tay công thức</a></section>
+
+<%@ include file="/WEB-INF/views/shared/end.jspf" %>

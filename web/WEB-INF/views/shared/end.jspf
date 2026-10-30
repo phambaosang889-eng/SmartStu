@@ -1,0 +1,3 @@
+<%@ page pageEncoding="UTF-8" %></div><footer class="workspace-footer"><span>SmartStu <span aria-hidden="true">·</span> Học để hiểu, luyện để nhớ</span><span>© <%=layout.year()%> SmartStu</span></footer></main>
+<dialog id="confirm-dialog" aria-labelledby="confirm-title"><h2 id="confirm-title">Xác nhận thao tác</h2><p id="confirm-message"></p><div class="actions"><button class="button secondary" type="button" data-confirm-cancel>Quay lại</button><button class="button primary" type="button" data-confirm-ok>Xác nhận</button></div></dialog>
+<script src="${pageContext.request.contextPath}/assets/js/workspace.js?v=20261030-utf8" charset="UTF-8"></script><script src="${pageContext.request.contextPath}/assets/js/theme.js?v=20261030" charset="UTF-8"></script></body></html>

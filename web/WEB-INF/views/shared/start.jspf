@@ -1,0 +1,7 @@
+<%@ page pageEncoding="UTF-8" import="author.*,com.smartstudy.web.ViewSupport,com.smartstudy.model.view.LayoutModel,java.util.*" %>
+<% LayoutModel layout=(LayoutModel)request.getAttribute("layout"); User viewer=layout.viewer(); String base=layout.base(),current=layout.current(),title=layout.title(); %>
+<!doctype html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0284c7"><title><%=ViewSupport.h(title)%> · SmartStu</title><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/workspace.css"><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/refinement.css?v=20261030-flashcard-center"><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/lesson-video.css?v=20261027"><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/mobile.css?v=20261028"></head><body class="workspace">
+<a class="skip-link" href="#main">Đến nội dung chính</a>
+<%@ include file="navigation.jspf" %>
+<main class="workspace-main" id="main"><%@ include file="header.jspf" %><div class="workspace-content">
+<%if(layout.flash()!=null){%><div class="notice success" role="status"><span><%=ViewSupport.h(layout.flash())%></span><button type="button" data-dismiss aria-label="Đóng thông báo">×</button></div><%}%>

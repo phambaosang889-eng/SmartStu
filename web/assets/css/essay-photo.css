@@ -1,0 +1,20 @@
+.essay-photo-panel{margin:24px auto;max-width:920px;min-width:0}
+.essay-photo-heading,.essay-photo-actions{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.essay-photo-heading h2{margin:4px 0 16px}
+.essay-photo-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.essay-photo-original,.photo-preview img{display:block;width:100%;max-height:480px;object-fit:contain;border:1px solid var(--line);background:#fff;border-radius:12px}
+.essay-ocr-text{width:100%;box-sizing:border-box;resize:vertical;font:400 15px/1.7 "Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.essay-photo-panel .essay-photo-consent{display:flex;align-items:flex-start;gap:10px;font-weight:400;line-height:1.6}
+.essay-photo-consent input{flex:0 0 auto;margin-top:5px}
+.essay-photo-panel .photo-file-label{flex:1;min-width:200px;margin-bottom:0}
+.photo-file-label input{max-width:100%;padding:10px;border:1px solid var(--line);border-radius:8px}
+.photo-preview{margin-top:20px}.photo-preview img{max-height:320px;margin-bottom:10px}
+.photo-progress{display:block;margin-top:12px;color:var(--primary)}
+.photo-progress[hidden]{display:none}
+.essay-photo-panel button:disabled,.essay-camera button:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.essay-photo-panel :focus-visible,.essay-camera :focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+.essay-photo-panel input[type=file]::file-selector-button{border:0;border-radius:6px;padding:9px 12px;margin-right:12px;background:var(--bg);color:var(--text);cursor:pointer;font:inherit}
+.essay-camera{width:min(720px,calc(100% - 32px));max-height:90dvh;overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:16px;padding:24px}
+.essay-camera video{display:block;width:100%;max-height:52dvh;object-fit:contain;background:#0f172a;border-radius:12px;margin-bottom:16px}
+.essay-camera::backdrop{background:#0f172a99}
+@media(max-width:700px){.essay-photo-layout{grid-template-columns:1fr}.essay-photo-actions{align-items:stretch;flex-direction:column}.essay-ocr-text{font-size:16px}.essay-photo-panel{padding:18px}}

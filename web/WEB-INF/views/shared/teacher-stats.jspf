@@ -1,0 +1,2 @@
+<%@ page pageEncoding="UTF-8" %>
+<%var teachingEssays=EssayWorkflow.getInstance().monitoring(person);var publishedEssays=teachingEssays.stream().filter(s->s.visible()!=null).toList();%><p><%=QuizService.getInstance().list(person).size()%> quiz · <%=teachingEssays.stream().filter(s->s.visible()==null).count()%> bài tự luận chờ công bố</p><p>Thời gian từ nộp đến lần công bố cuối: <%=publishedEssays.isEmpty()?"Chưa có dữ liệu":Math.round(publishedEssays.stream().mapToLong(s->java.time.Duration.between(s.at(),s.visible().at()).toMinutes()).average().orElse(0))+" phút TB"%></p>

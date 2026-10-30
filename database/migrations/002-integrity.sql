@@ -1,0 +1,67 @@
+-- SmartStu v2: additive integrity migration. No application data is deleted.
+USE smartstu;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='content_placements' AND column_name='course_id'), 'SELECT 1', 'ALTER TABLE content_placements ADD COLUMN course_id VARCHAR(191) GENERATED ALWAYS AS (JSON_UNQUOTE(JSON_EXTRACT(payload,''$.course''))) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='content_placements' AND column_name='chapter_id'), 'SELECT 1', 'ALTER TABLE content_placements ADD COLUMN chapter_id VARCHAR(191) GENERATED ALWAYS AS (NULLIF(JSON_UNQUOTE(JSON_EXTRACT(payload,''$.chapter'')),'''')) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='question_owners' AND column_name='owner_email'), 'SELECT 1', 'ALTER TABLE question_owners ADD COLUMN owner_email VARCHAR(150) GENERATED ALWAYS AS (JSON_UNQUOTE(payload)) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='question_bank' AND column_name='topic'), 'SELECT 1', 'ALTER TABLE question_bank ADD COLUMN topic VARCHAR(80) GENERATED ALWAYS AS (JSON_UNQUOTE(JSON_EXTRACT(payload,''$.topic''))) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='question_bank' AND column_name='difficulty'), 'SELECT 1', 'ALTER TABLE question_bank ADD COLUMN difficulty VARCHAR(40) GENERATED ALWAYS AS (JSON_UNQUOTE(JSON_EXTRACT(payload,''$.difficulty''))) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='quiz_attempts' AND column_name='student_email'), 'SELECT 1', 'ALTER TABLE quiz_attempts ADD COLUMN student_email VARCHAR(150) GENERATED ALWAYS AS (JSON_UNQUOTE(JSON_EXTRACT(payload,''$.run.email''))) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='quiz_attempts' AND column_name='quiz_id'), 'SELECT 1', 'ALTER TABLE quiz_attempts ADD COLUMN quiz_id VARCHAR(191) GENERATED ALWAYS AS (JSON_UNQUOTE(JSON_EXTRACT(payload,''$.run.quiz.id''))) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='quiz_attempts' AND column_name='score'), 'SELECT 1', 'ALTER TABLE quiz_attempts ADD COLUMN score INT GENERATED ALWAYS AS (JSON_EXTRACT(payload,''$.score'')) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='quiz_attempts' AND column_name='maximum'), 'SELECT 1', 'ALTER TABLE quiz_attempts ADD COLUMN maximum INT GENERATED ALWAYS AS (JSON_EXTRACT(payload,''$.run.quiz.maxScore'')) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='essay_submissions' AND column_name='public_id'), 'SELECT 1', 'ALTER TABLE essay_submissions ADD COLUMN public_id VARCHAR(191) GENERATED ALWAYS AS (JSON_UNQUOTE(JSON_EXTRACT(payload,''$.id''))) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='essay_submissions' AND column_name='owner_email'), 'SELECT 1', 'ALTER TABLE essay_submissions ADD COLUMN owner_email VARCHAR(150) GENERATED ALWAYS AS (JSON_UNQUOTE(JSON_EXTRACT(payload,''$.assignment.owner''))) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='enrollments' AND column_name='active'), 'SELECT 1', 'ALTER TABLE enrollments ADD COLUMN active TINYINT GENERATED ALWAYS AS (JSON_EXTRACT(payload,''$.active'')=TRUE) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='essay_drafts' AND column_name='student_email'), 'SELECT 1', 'ALTER TABLE essay_drafts ADD COLUMN student_email VARCHAR(150) GENERATED ALWAYS AS (SUBSTRING_INDEX(row_key,'':'',1)) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='essay_drafts' AND column_name='assignment_id'), 'SELECT 1', 'ALTER TABLE essay_drafts ADD COLUMN assignment_id VARCHAR(191) GENERATED ALWAYS AS (SUBSTRING_INDEX(row_key,'':'',-1)) STORED');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='essay_submissions' AND index_name='uq_submission_public'), 'SELECT 1', 'ALTER TABLE essay_submissions ADD UNIQUE INDEX uq_submission_public(public_id)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='content_placements' AND index_name='ix_placement_course_chapter'), 'SELECT 1', 'ALTER TABLE content_placements ADD INDEX ix_placement_course_chapter(course_id,chapter_id)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='question_bank' AND index_name='ix_question_topic_level'), 'SELECT 1', 'ALTER TABLE question_bank ADD INDEX ix_question_topic_level(topic,difficulty)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='quiz_attempts' AND index_name='ix_attempt_student_quiz'), 'SELECT 1', 'ALTER TABLE quiz_attempts ADD INDEX ix_attempt_student_quiz(student_email,quiz_id)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='essay_submissions' AND index_name='ix_submission_teacher'), 'SELECT 1', 'ALTER TABLE essay_submissions ADD INDEX ix_submission_teacher(owner_email)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='enrollments' AND index_name='ix_enrollment_course_active'), 'SELECT 1', 'ALTER TABLE enrollments ADD INDEX ix_enrollment_course_active(course_id,active)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_schema=DATABASE() AND table_name='content_placements' AND constraint_name='fk_placement_course'), 'SELECT 1', 'ALTER TABLE content_placements ADD CONSTRAINT fk_placement_course FOREIGN KEY(course_id) REFERENCES catalog_entries(row_key)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_schema=DATABASE() AND table_name='content_placements' AND constraint_name='fk_placement_chapter'), 'SELECT 1', 'ALTER TABLE content_placements ADD CONSTRAINT fk_placement_chapter FOREIGN KEY(chapter_id) REFERENCES chapters(row_key)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_schema=DATABASE() AND table_name='question_owners' AND constraint_name='fk_question_owner_user'), 'SELECT 1', 'ALTER TABLE question_owners ADD CONSTRAINT fk_question_owner_user FOREIGN KEY(owner_email) REFERENCES users(email)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_schema=DATABASE() AND table_name='quiz_attempts' AND constraint_name='fk_attempt_student'), 'SELECT 1', 'ALTER TABLE quiz_attempts ADD CONSTRAINT fk_attempt_student FOREIGN KEY(student_email) REFERENCES users(email)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_schema=DATABASE() AND table_name='quiz_attempts' AND constraint_name='ck_attempt_score'), 'SELECT 1', 'ALTER TABLE quiz_attempts ADD CONSTRAINT ck_attempt_score CHECK(score >= 0 AND score <= maximum)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_schema=DATABASE() AND table_name='essay_submissions' AND constraint_name='fk_submission_teacher'), 'SELECT 1', 'ALTER TABLE essay_submissions ADD CONSTRAINT fk_submission_teacher FOREIGN KEY(owner_email) REFERENCES users(email)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_schema=DATABASE() AND table_name='essay_drafts' AND constraint_name='fk_draft_student'), 'SELECT 1', 'ALTER TABLE essay_drafts ADD CONSTRAINT fk_draft_student FOREIGN KEY(student_email) REFERENCES users(email)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_schema=DATABASE() AND table_name='essay_drafts' AND constraint_name='fk_draft_assignment'), 'SELECT 1', 'ALTER TABLE essay_drafts ADD CONSTRAINT fk_draft_assignment FOREIGN KEY(assignment_id) REFERENCES essay_assignments(row_key)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+SET @smartstu_ddl = IF((SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_schema=DATABASE() AND table_name='essay_ai_suggestions' AND constraint_name='fk_suggestion_submission'), 'SELECT 1', 'ALTER TABLE essay_ai_suggestions ADD CONSTRAINT fk_suggestion_submission FOREIGN KEY(row_key) REFERENCES essay_submissions(public_id)');
+PREPARE smartstu_stmt FROM @smartstu_ddl; EXECUTE smartstu_stmt; DEALLOCATE PREPARE smartstu_stmt;
+CREATE OR REPLACE VIEW student_lesson_progress AS
+ SELECT p.row_key AS student_email,j.lesson_id FROM lesson_progress p
+ JOIN JSON_TABLE(p.payload,'$[*]' COLUMNS(lesson_id VARCHAR(191) PATH '$')) j;
+CREATE OR REPLACE VIEW student_flashcard_progress AS
+ SELECT p.row_key AS student_email,j.flashcard_id FROM flashcard_progress p
+ JOIN JSON_TABLE(p.payload,'$[*]' COLUMNS(flashcard_id VARCHAR(191) PATH '$')) j;
+INSERT IGNORE INTO schema_migrations(version) VALUES(2);

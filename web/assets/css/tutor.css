@@ -1,0 +1,23 @@
+.tutor-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}.tutor-history{padding:20px;max-height:760px;overflow:auto}.tutor-history h2{font-size:15px;margin-top:24px}.tutor-history-link{display:flex;flex-direction:column;gap:5px;padding:12px;border-radius:10px;margin:6px 0;color:var(--text);text-decoration:none;overflow-wrap:anywhere}.tutor-history-link:hover,.tutor-history-link.selected{background:rgba(2,132,199,.09);color:var(--primary)}.tutor-history small,.tutor-message small{color:var(--muted);font-size:12px}.tutor-chat{padding:24px;min-width:0}.tutor-chat-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.tutor-chat-heading h2{font-size:18px}.tutor-empty{padding:56px 20px;text-align:center}.tutor-empty ul{display:inline-block;text-align:left;line-height:2}.tutor-mark{display:inline-block;padding:22px;border-radius:20px;background:var(--accent);color:var(--primary);font-size:28px;font-weight:800}.tutor-messages{display:flex;flex-direction:column;gap:18px;margin:24px 0;max-height:600px;overflow:auto;scrollbar-gutter:stable}.tutor-message{max-width:92%;border:1px solid var(--line,#dfe7ed);border-radius:14px;padding:16px;overflow-wrap:anywhere;background:rgba(120,150,170,.05)}.tutor-message.from-user{align-self:flex-end;background:rgba(2,132,199,.08)}.tutor-message strong{font-size:13px;color:var(--primary)}.tutor-text{white-space:pre-wrap;line-height:1.75}.tutor-composer{border-top:1px solid var(--line,#dfe7ed);padding-top:20px}.tutor-composer textarea{width:100%;resize:vertical}.tutor-compose-actions{display:flex;gap:16px;justify-content:space-between;align-items:center;margin:12px 0}.tutor-loading{color:var(--primary);font-weight:600}.tutor-composer .muted{font-size:12px;line-height:1.7}@media(max-width:1050px){.tutor-layout{grid-template-columns:210px minmax(0,1fr);gap:16px}}@media(max-width:700px){.tutor-layout{grid-template-columns:1fr}.tutor-history{max-height:230px}.tutor-chat{padding:18px}.tutor-compose-actions{align-items:stretch;flex-direction:column}.tutor-chat-heading{align-items:flex-start;flex-wrap:wrap}.tutor-message{max-width:100%}.tutor-empty{padding:28px 0}}
+/* Readable chat typography; scoped so other learning pages keep their styles. */
+.workspace .tutor-message{font-size:15px;line-height:1.65;padding:18px 20px;}
+.workspace .tutor-message.from-tutor{max-width:100%;width:100%;background:var(--surface,#fff);}
+.workspace .tutor-message>strong{display:block;font-size:12px;line-height:1.5;margin-bottom:10px;}
+.workspace .tutor-message>small{display:block;font-size:11px;margin-top:14px;}
+.workspace .tutor-text{margin:0;white-space:pre-wrap;color:var(--text);line-height:1.7;}
+.workspace .tutor-rich-text{white-space:normal;}
+.workspace .tutor-rich-text p{font-size:inherit;line-height:inherit;color:inherit;margin:0 0 12px;white-space:pre-line;}
+.workspace .tutor-rich-text p:last-child{margin-bottom:0;}
+.workspace .tutor-rich-text strong{font-size:inherit;color:inherit;font-weight:650;}
+.workspace .tutor-rich-text h3{font-size:16px;line-height:1.5;margin:18px 0 10px;}
+.workspace .tutor-rich-text h3:first-child{margin-top:0;}
+.workspace .tutor-rich-text ol,.workspace .tutor-rich-text ul{padding-left:24px;margin:10px 0 16px;}
+.workspace .tutor-rich-text li{padding-left:3px;margin:7px 0;}
+.workspace .tutor-rich-text code{font-size:.9em;background:rgba(2,132,199,.07);border-radius:4px;padding:2px 5px;white-space:pre-wrap;}
+.workspace .tutor-rich-text .katex{font-size:1.08em;}
+.workspace .tutor-equation{display:block;overflow-x:auto;overflow-y:hidden;max-width:100%;padding:8px 4px;margin:12px 0;background:rgba(2,132,199,.035);border-radius:8px;}
+.workspace .tutor-equation .katex-display{margin:6px 0;text-align:left;}
+.workspace .tutor-equation .katex-display>.katex{text-align:left;}
+.workspace .tutor-inline-math{display:inline-block;max-width:100%;vertical-align:middle;overflow-x:auto;overflow-y:hidden;}
+.workspace .tutor-math-fallback{font-family:monospace;white-space:pre-wrap;}
+@media(max-width:600px){.workspace .tutor-message{padding:14px;font-size:15px;}}
