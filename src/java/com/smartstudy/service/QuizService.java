@@ -37,7 +37,7 @@ public final class QuizService {
                         "newton-demo",
                         "Luyện tập định luật Newton",
                         "Vận dụng F = ma, xác định lực tổng hợp và gia tốc. Mỗi câu chọn một đáp án"
-                            + " đúng.",
+                                + " đúng.",
                         8,
                         "published",
                         "teacher@smartstudy.vn",

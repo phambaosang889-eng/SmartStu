@@ -149,7 +149,7 @@ public final class GeminiAdapter {
                     "MAX_TOKENS".equals(finish)
                             ? "Gemini chưa trả đủ nội dung. Hãy giảm số câu hoặc rút ngắn yêu cầu."
                             : "Gemini chưa hoàn tất hoặc từ chối phản hồi. Hãy điều chỉnh yêu cầu"
-                                  + " và thử lại.");
+                                    + " và thử lại.");
         StringBuilder text = new StringBuilder();
         for (Object value : Json.array(Json.object(candidate.get("content")).get("parts"))) {
             Map<?, ?> part = Json.object(value);

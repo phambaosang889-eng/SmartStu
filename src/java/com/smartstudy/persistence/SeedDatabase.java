@@ -23,6 +23,6 @@ public final class SeedDatabase {
         }
         System.out.println(
                 "Initial accounts and learning content initialized; existing aggregates were"
-                    + " preserved.");
+                        + " preserved.");
     }
 }

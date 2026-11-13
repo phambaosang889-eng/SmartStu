@@ -18,6 +18,13 @@ public final class DashboardController {
         String p = ViewSupport.current(req);
         if (!Set.of("dashboard", "progress", "reports").contains(p)) return false;
         User u = (User) req.getSession().getAttribute("user");
+        if (u.getRole() == Role.ADMIN) {
+            req.setAttribute("systemAccounts", UserStore.list());
+            req.setAttribute("systemAI", AIService.getInstance());
+            req.getRequestDispatcher("/WEB-INF/views/shared/system-dashboard.jsp")
+                    .forward(req, resp);
+            return true;
+        }
         boolean student = u.getRole() == Role.STUDENT, admin = u.getRole() == Role.ADMIN;
         var cs = CourseService.getInstance();
         var ls = LearningService.getInstance();

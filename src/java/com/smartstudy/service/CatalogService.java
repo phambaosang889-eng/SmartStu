@@ -61,7 +61,7 @@ public final class CatalogService {
                 "courses",
                 "Vật lý 10 · Cơ học",
                 "Lộ trình học từ chuyển động đến lực, công và năng lượng. Đọc bài học, luyện"
-                    + " flashcard, làm quiz và trình bày bài tự luận để củng cố kiến thức.",
+                        + " flashcard, làm quiz và trình bày bài tự luận để củng cố kiến thức.",
                 "Vật lý 10");
         seed(
                 "lesson-motion",
@@ -178,7 +178,7 @@ public final class CatalogService {
                 "students",
                 "Minh",
                 "Học sinh demo · student@smartstudy.vn. Tài khoản demo đăng nhập được cung cấp ở"
-                    + " trang đăng nhập.",
+                        + " trang đăng nhập.",
                 "10A1");
         seed(
                 "teacher-huong",
@@ -191,7 +191,7 @@ public final class CatalogService {
                 "notifications",
                 "Ôn tập định luật Newton",
                 "Đọc bài Ba định luật Newton, ôn flashcard và hoàn thành bài luyện tập. Khi viết tự"
-                    + " luận, nhớ trình bày công thức, thay số và đơn vị.",
+                        + " luận, nhớ trình bày công thức, thay số và đơn vị.",
                 "10A1");
     }
 
@@ -287,7 +287,7 @@ public final class CatalogService {
                         && topicKey(existing.topic()).equals(normalizedGroup))
                     throw new IllegalArgumentException(
                             "Danh mục / chủ đề này đã tồn tại. Hãy chỉnh sửa mục hiện có thay vì"
-                                + " thêm bản trùng.");
+                                    + " thêm bản trùng.");
         }
         String key = old == null ? UUID.randomUUID().toString() : old.id();
         CatalogEntry next =

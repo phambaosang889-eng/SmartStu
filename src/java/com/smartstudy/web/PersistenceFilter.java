@@ -25,7 +25,13 @@ public final class PersistenceFilter implements Filter {
                         || path.endsWith("/ai-questions")
                                 && ("generate".equals(action)
                                         || action != null && action.startsWith("regenerate_"))
-                        || path.endsWith("/essays") && "ai-review".equals(action)
+                        || path.endsWith("/essays")
+                                && ("ai-review".equals(action) || "student-feedback".equals(action))
+                /*
+                                                && ("ai-review".equals(action)
+                                        || "student-feedback".equals(action)
+                                        || "generate-practice".equals(action))
+                */
                         || path.endsWith("/essay-photo") && "scan".equals(action);
         boolean write = !Database.memory() && "POST".equals(req.getMethod()) && !remoteAI;
         CommitResponse buffered = write ? new CommitResponse(resp) : null;
@@ -40,7 +46,7 @@ public final class PersistenceFilter implements Filter {
                             try (var s =
                                             c.prepareStatement(
                                                     "SELECT id FROM write_lock WHERE id=1 FOR"
-                                                        + " UPDATE");
+                                                            + " UPDATE");
                                     var r = s.executeQuery()) {
                                 if (!r.next())
                                     throw new java.sql.SQLException("Missing migration lock");

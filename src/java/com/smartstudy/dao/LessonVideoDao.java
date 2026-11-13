@@ -29,7 +29,7 @@ public final class LessonVideoDao {
                     try (var s =
                             c.prepareStatement(
                                     "SELECT * FROM lesson_videos WHERE lesson_id=? AND"
-                                        + " archived=FALSE ORDER BY created_at,id")) {
+                                            + " archived=FALSE ORDER BY created_at,id")) {
                         s.setString(1, lesson);
                         try (var r = s.executeQuery()) {
                             while (r.next()) out.add(read(r));
@@ -83,7 +83,7 @@ public final class LessonVideoDao {
                     try (var s =
                             c.prepareStatement(
                                     "SELECT COALESCE(SUM(byte_size),0) FROM lesson_videos WHERE"
-                                        + " owner_email=?")) {
+                                            + " owner_email=?")) {
                         s.setString(1, owner);
                         try (var r = s.executeQuery()) {
                             r.next();

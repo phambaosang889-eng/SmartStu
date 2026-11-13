@@ -81,16 +81,34 @@ public final class EssayWorkflow {
                 : null;
     }
 
+    public synchronized com.smartstudy.model.EssayGradingResult studentSuggestion(
+            String id, User u) {
+        return u.getRole() == Role.STUDENT && submission(id, u) != null
+                ? suggestions.get(id)
+                : null;
+    }
+
+    public void studentFeedback(User user, String id) {
+        if (user.getRole() != Role.STUDENT || submission(id, user) == null)
+            throw new IllegalArgumentException("Bài nộp không thuộc tài khoản của bạn.");
+        if (studentSuggestion(id, user) == null) generateSuggestion(user, id);
+    }
+
     public void suggest(User u, String id) {
         Submission s = submission(id, u);
         if (u.getRole() != Role.TEACHER || s == null)
             throw new IllegalArgumentException("Bài nộp không thuộc khóa học của bạn.");
+        generateSuggestion(u, id);
+    }
+
+    private void generateSuggestion(User u, String id) {
+        Submission s = submission(id, u);
         var photos = new EssayPhotoService();
         var photo = photos.submitted(u, id);
         String answer = s.answer();
         byte[] image = null;
         if (photo != null) {
-            photo = photos.scan(u, photo.id());
+            photo = photos.scanForFeedback(u, photo.id());
             if (photo.transcription() == null
                     || photo.transcription().isBlank()
                     || photo.confidence() == null
@@ -98,7 +116,7 @@ public final class EssayWorkflow {
                     || photo.transcription().contains("[không đọc rõ]"))
                 throw new IllegalArgumentException(
                         "Ảnh chưa đọc đủ rõ để đề xuất điểm. Hãy xem ảnh và chấm thủ công; không tự"
-                            + " suy đoán phần bài làm bị mờ.");
+                                + " suy đoán phần bài làm bị mờ.");
             answer += "\n\nNội dung đọc từ ảnh bài làm:\n" + photo.transcription();
             image = photos.bytes(u, photo.id());
         }
@@ -132,10 +150,10 @@ public final class EssayWorkflow {
                         "teacher@smartstudy.vn",
                         "Vận dụng định luật II Newton",
                         "Một vật có khối lượng 2 kg chịu hợp lực 10 N. Tính gia tốc, trình bày các"
-                            + " bước giải và giải thích hướng của gia tốc.",
+                                + " bước giải và giải thích hướng của gia tốc.",
                         "Nêu dữ kiện, chọn công thức, thay số với đơn vị SI và kết luận bằng lời.",
                         "Theo định luật II Newton: a = F/m = 10/2 = 5 m/s². Gia tốc cùng hướng với"
-                            + " hợp lực tác dụng lên vật.",
+                                + " hợp lực tác dụng lên vật.",
                         List.of(
                                 new Criterion("Nêu đúng định luật và công thức", 3),
                                 new Criterion("Thay số và tính toán đúng", 3),

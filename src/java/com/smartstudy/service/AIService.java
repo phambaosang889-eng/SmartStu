@@ -10,10 +10,10 @@ import java.util.*;
 /** Server-side Gemini REST or legacy HTTPS gateway. Secrets stay outside the public application. */
 public final class AIService {
     public void requireVision() {
-        if (!"gemini".equals(provider))
+        if (!"gemini".equals(provider()))
             throw new IllegalArgumentException(
                     "Đọc ảnh cần kết nối Google Gemini. Bạn vẫn có thể nhập nội dung và chấm thủ"
-                        + " công.");
+                            + " công.");
     }
 
     public EssayPhotoReading readEssayPhoto(User user, byte[] image) {
@@ -67,7 +67,7 @@ public final class AIService {
     private final String
             endpoint = com.smartstudy.persistence.Database.setting("SMARTSTU_AI_ENDPOINT", ""),
             key = com.smartstudy.persistence.Database.setting("SMARTSTU_AI_KEY", "");
-    private final String provider =
+    private final String defaultProvider =
             com.smartstudy.persistence.Database.setting(
                             "SMARTSTU_AI_PROVIDER", endpoint.isBlank() ? "gemini" : "gateway")
                     .toLowerCase(Locale.ROOT);
@@ -78,9 +78,9 @@ public final class AIService {
                             "SMARTSTU_GEMINI_MODEL", "gemini-3.5-flash-lite");
 
     public String providerLabel() {
-        return "gemini".equals(provider)
-                ? "Google Gemini · " + model
-                : "gateway".equals(provider) ? "AI gateway" : "Nhà cung cấp chưa hợp lệ";
+        return "gemini".equals(provider())
+                ? "Google Gemini · " + model()
+                : "gateway".equals(provider()) ? "AI gateway" : "Nhà cung cấp chưa hợp lệ";
     }
 
     private final HttpClient client =
@@ -90,24 +90,65 @@ public final class AIService {
                     .build();
     private final Map<String, String> settings =
             com.smartstudy.persistence.Stores.map("system_settings", String.class);
+
+    private final AISecretStore secrets =
+            new AISecretStore(com.smartstudy.persistence.Database.aiSecretsFile());
+
+    private String geminiKey() {
+        return secrets.get("gemini", geminiKey);
+    }
+
+    private String gatewayKey() {
+        return secrets.get("gateway", key);
+    }
+
+    public void updateKey(User user, String provider, String value) {
+        if (user.getRole() != Role.ADMIN)
+            throw new IllegalArgumentException("Chỉ Admin được đổi API key.");
+        secrets.save(provider, value);
+    }
+
+    public String provider() {
+        return settings.getOrDefault("ai.provider", defaultProvider);
+    }
+
+    public void configureProvider(User user, String value) {
+        if (user.getRole() != Role.ADMIN || !Set.of("gemini", "gateway").contains(value))
+            throw new IllegalArgumentException("Nhà cung cấp không hợp lệ.");
+        settings.put("ai.provider", value);
+    }
+
+    public String model() {
+        return settings.getOrDefault("ai.model", model);
+    }
+
+    public void configureModel(User user, String value) {
+        if (user.getRole() != Role.ADMIN)
+            throw new IllegalArgumentException("Chỉ Admin được đổi model.");
+        if (value == null || !value.matches("gemini-[a-zA-Z0-9._-]{1,100}"))
+            throw new IllegalArgumentException("Tên model Gemini không hợp lệ.");
+        settings.put("ai.model", value);
+        AuditService.record(user.getEmail(), "Đổi model AI", value);
+    }
+
     private final Map<String, Deque<Instant>> calls = new HashMap<>();
     private long success, failures;
     private String lastState = "Chưa thực hiện yêu cầu kết nối";
 
     public boolean configured() {
-        if ("gemini".equals(provider))
-            return !geminiKey.isBlank()
-                    && !geminiKey.contains("\n")
-                    && !geminiKey.contains("\r")
-                    && model.matches("gemini-[a-zA-Z0-9._-]{1,100}");
-        if (!"gateway".equals(provider)) return false;
+        if ("gemini".equals(provider()))
+            return !geminiKey().isBlank()
+                    && !geminiKey().contains("\n")
+                    && !geminiKey().contains("\r")
+                    && model().matches("gemini-[a-zA-Z0-9._-]{1,100}");
+        if (!"gateway".equals(provider())) return false;
         try {
             URI u = URI.create(endpoint == null ? "" : endpoint);
             return "https".equals(u.getScheme())
                     && u.getHost() != null
                     && u.getUserInfo() == null
-                    && key != null
-                    && !key.isBlank();
+                    && gatewayKey() != null
+                    && !gatewayKey().isBlank();
         } catch (Exception e) {
             return false;
         }
@@ -153,12 +194,12 @@ public final class AIService {
     private synchronized void reserve(User u, String operation) {
         if (u.getRole() != Role.TEACHER
                 && u.getRole() != Role.ADMIN
-                && !Set.of("tutor", "essay-ocr").contains(operation))
+                && !Set.of("tutor", "essay-ocr", "essay").contains(operation))
             throw new IllegalArgumentException("Không có quyền gọi AI.");
         if (!available())
             throw new IllegalArgumentException(
                     "AI chưa cấu hình hoặc đang tạm dừng. Liên hệ quản trị viên để cấu hình kết"
-                        + " nối; các chức năng học tập khác vẫn sử dụng được.");
+                            + " nối; các chức năng học tập khác vẫn sử dụng được.");
         Instant now = Instant.now();
         Deque<Instant> window = calls.computeIfAbsent(u.getEmail(), k -> new ArrayDeque<>());
         while (!window.isEmpty() && window.peekFirst().isBefore(now.minusSeconds(300)))
@@ -172,11 +213,11 @@ public final class AIService {
         reserve(u, String.valueOf(payload.get("operation")));
         try {
             var req =
-                    "gemini".equals(provider)
-                            ? GeminiAdapter.request(geminiKey, model, payload)
+                    "gemini".equals(provider())
+                            ? GeminiAdapter.request(geminiKey(), model(), payload)
                             : HttpRequest.newBuilder(URI.create(endpoint))
                                     .timeout(Duration.ofSeconds(25))
-                                    .header("Authorization", "Bearer " + key)
+                                    .header("Authorization", "Bearer " + gatewayKey())
                                     .header("Content-Type", "application/json; charset=UTF-8")
                                     .header("Accept", "application/json")
                                     .POST(
@@ -207,7 +248,7 @@ public final class AIService {
                                     new String(
                                             response.body(),
                                             java.nio.charset.StandardCharsets.UTF_8)));
-            if ("gemini".equals(provider)) data = GeminiAdapter.decode(data);
+            if ("gemini".equals(provider())) data = GeminiAdapter.decode(data);
             synchronized (this) {
                 success++;
                 lastState =
@@ -233,13 +274,13 @@ public final class AIService {
             case 400 -> "AI không chấp nhận yêu cầu. Kiểm tra API key, mô hình và độ dài nội dung.";
             case 401, 403 ->
                     "API key không hợp lệ hoặc chưa được cấp quyền dùng mô hình. Kiểm tra cấu hình"
-                        + " máy chủ.";
+                            + " máy chủ.";
             case 404 ->
                     "Không tìm thấy mô hình AI. Kiểm tra SMARTSTU_GEMINI_MODEL hoặc endpoint"
-                        + " gateway.";
+                            + " gateway.";
             case 429 ->
                     "Đã hết hạn mức hoặc dịch vụ AI đang giới hạn yêu cầu. Kiểm tra quota trong"
-                        + " Google AI Studio và thử lại sau.";
+                            + " Google AI Studio và thử lại sau.";
             default ->
                     "Dịch vụ AI tạm thời không khả dụng (HTTP "
                             + status
@@ -249,8 +290,8 @@ public final class AIService {
 
     private synchronized IllegalArgumentException error(String msg) {
         if (msg == null) msg = "Không xử lý được phản hồi AI.";
-        if (!geminiKey.isBlank()) msg = msg.replace(geminiKey, "[đã ẩn]");
-        if (!key.isBlank()) msg = msg.replace(key, "[đã ẩn]");
+        if (!geminiKey().isBlank()) msg = msg.replace(geminiKey(), "[đã ẩn]");
+        if (!gatewayKey().isBlank()) msg = msg.replace(gatewayKey(), "[đã ẩn]");
         failures++;
         lastState = msg;
         AuditService.record("AI service", "Lỗi tích hợp", msg);
@@ -325,6 +366,8 @@ public final class AIService {
 
     public EssayGradingResult grade(
             User u, EssayWorkflow.Submission s, String answer, byte[] photo) {
+        if (u.getRole() == Role.STUDENT && !u.getEmail().equals(s.email()))
+            throw new IllegalArgumentException("Không có quyền chấm bài của người khác.");
         var a = s.assignment();
         List<Map<String, Object>> rubric = new ArrayList<>();
         for (var c : a.rubric()) rubric.add(Map.of("title", c.title(), "maximum", c.max()));

@@ -90,7 +90,7 @@ public final class LessonVideoService {
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(
                     "Dán liên kết HTTPS YouTube hợp lệ của một video, không dùng liên kết danh sách"
-                        + " phát.");
+                            + " phát.");
         }
     }
 
@@ -148,7 +148,7 @@ public final class LessonVideoService {
                 && (header[3] & 255) == 0xa3) return "video/webm";
         throw new IllegalArgumentException(
                 "File không có định dạng MP4/WebM hợp lệ. Hãy xuất video MP4 (H.264/AAC) hoặc"
-                    + " WebM.");
+                        + " WebM.");
     }
 
     public LessonVideo upload(
@@ -161,7 +161,7 @@ public final class LessonVideoService {
         if (dao.storedBytes(user.getEmail()) + size > 2L * 1024 * 1024 * 1024)
             throw new IllegalArgumentException(
                     "Kho video giáo viên đã đạt giới hạn 2 GB. Liên hệ quản trị viên hoặc dùng"
-                        + " video YouTube.");
+                            + " video YouTube.");
         byte[] header = input.readNBytes(16);
         String mime = detect(header, filename), id = UUID.randomUUID().toString();
         Path dir = directory();

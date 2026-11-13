@@ -28,8 +28,8 @@ public final class ConversationDao {
                     try (var s =
                             c.prepareStatement(
                                     "SELECT id,title,created_at FROM ai_conversations WHERE"
-                                        + " owner_email=? AND deleted_at IS NULL ORDER BY"
-                                        + " created_at DESC,id DESC LIMIT 51 OFFSET ?")) {
+                                            + " owner_email=? AND deleted_at IS NULL ORDER BY"
+                                            + " created_at DESC,id DESC LIMIT 51 OFFSET ?")) {
                         s.setString(1, user.getEmail());
                         s.setInt(2, (Math.max(1, Math.min(page, 1000)) - 1) * 50);
                         try (var r = s.executeQuery()) {
@@ -52,7 +52,7 @@ public final class ConversationDao {
                     try (var s =
                             c.prepareStatement(
                                     "INSERT INTO ai_conversations(id,owner_email,title)"
-                                        + " VALUES(?,?,?)")) {
+                                            + " VALUES(?,?,?)")) {
                         s.setString(1, id);
                         s.setString(2, user.getEmail());
                         s.setString(3, "Hội thoại mới");
@@ -68,7 +68,7 @@ public final class ConversationDao {
         try (var s =
                 c.prepareStatement(
                         "SELECT id FROM ai_conversations WHERE id=? AND owner_email=? AND"
-                            + " deleted_at IS NULL"
+                                + " deleted_at IS NULL"
                                 + (lock ? " FOR UPDATE" : ""))) {
             s.setString(1, id);
             s.setString(2, user.getEmail());
@@ -128,7 +128,7 @@ public final class ConversationDao {
                                                         && !text.equals(r.getString(2)))
                                                     throw new IllegalArgumentException(
                                                             "Mã gửi lại không khớp nội dung ban"
-                                                                + " đầu.");
+                                                                    + " đầu.");
                                                 if ("assistant".equals(r.getString(1))) {
                                                     if ("complete".equals(r.getString(3))
                                                             || "pending".equals(r.getString(3))
@@ -168,21 +168,21 @@ public final class ConversationDao {
                                             if (r.getInt(1) > 0)
                                                 throw new IllegalArgumentException(
                                                         "Hội thoại đang xử lý câu hỏi trước. Vui"
-                                                            + " lòng chờ kết quả hoặc tải lại"
-                                                            + " trang.");
+                                                                + " lòng chờ kết quả hoặc tải lại"
+                                                                + " trang.");
                                         }
                                     }
                                     try (var s =
                                             c.prepareStatement(
                                                     "SELECT COUNT(*) FROM ai_messages WHERE"
-                                                        + " conversation_id=?")) {
+                                                            + " conversation_id=?")) {
                                         s.setString(1, id);
                                         try (var r = s.executeQuery()) {
                                             r.next();
                                             if (r.getInt(1) >= 100)
                                                 throw new IllegalArgumentException(
                                                         "Hội thoại đã đủ 50 lượt. Hãy tạo hội thoại"
-                                                            + " mới.");
+                                                                + " mới.");
                                         }
                                     }
                                     try (var s =
@@ -200,7 +200,7 @@ public final class ConversationDao {
                                     try (var s =
                                             c.prepareStatement(
                                                     "UPDATE ai_conversations SET title=? WHERE id=?"
-                                                        + " AND title='Hội thoại mới'")) {
+                                                            + " AND title='Hội thoại mới'")) {
                                         s.setString(
                                                 1, text.substring(0, Math.min(70, text.length())));
                                         s.setString(2, id);

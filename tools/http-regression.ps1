@@ -32,16 +32,12 @@ Check ((Post $teacher '/teacher/ai-questions' @{csrf=$csrf;action='generate';top
 Check ((Post $teacher '/teacher/ai-questions' @{csrf=$csrf;action='generate';count='2';level='Vận dụng';points='1';mode='demo';hardness='Dễ';seconds='60'}).StatusCode -eq 400) 'missing AI topic is validation error, not 500'
 $studentCsrf=Token ((ReadPage $student '/student/profile').Content);Check ((Post $student '/student/flashcards' @{csrf=$studentCsrf;action='mark-card';id='card-newton';state='invalid'}).StatusCode -eq 400) 'invalid flashcard state rejected'
 $adminCsrf=Token ((ReadPage $admin '/admin/profile').Content);Check ((Post $admin '/admin/users' @{csrf=$adminCsrf;action='save-account';email='invalid@example.vn';name='Invalid';status='active';version='0'}).StatusCode -eq 400) 'missing account role is validation error'
-$topicPage=ReadPage $admin '/admin/topics'
-$existingTopic=[regex]::Match($topicPage.Content,'<a\s+href="[^"]*/admin/topics\?id=([^"]+)"\s*>\s*Đo lường\s*</a>')
-$topicData=@{csrf=$adminCsrf;action='save';id='';version='0';title='Đo lường';body='Sử dụng dụng cụ đo, đơn vị SI và biểu diễn sai số.';topic='Chủ đề';status='published'}
-if($existingTopic.Success){$topicEdit=ReadPage $admin ('/admin/topics?mode=edit&id='+$existingTopic.Groups[1].Value);$topicData=Fields (Form $topicEdit.Content 'class="surface editor-form"');$topicData['title']='Đo lường';$topicData['topic']='Chủ đề';$topicData['status']='published'}
-$page=Post $admin '/admin/topics' $topicData;Check ($page.StatusCode -eq 200 -and $page.Content -match 'Đo lường') 'admin manages system topic without adding a duplicate on rerun'
-Check ((Post $admin '/admin/topics' @{csrf=$adminCsrf;action='save';id='';version='0';title='  ĐO LƯỜNG  ';body='Kiểm tra chống trùng.';topic='Chủ đề';status='published'}).StatusCode -eq 400) 'duplicate topic rejected on server'
-$page=ReadPage $teacher '/teacher/courses?mode=edit';Check ($page.Content -match 'Đo lường') 'managed topic offered in course editor'
-$page=ReadPage $admin '/admin/quiz';$csrfAdmin=Token ((ReadPage $admin '/admin/profile').Content)
-Check ((Post $admin '/admin/quiz' @{csrf=$csrfAdmin;action='copy';id='newton-demo'}).StatusCode -eq 403) 'admin server mutation denied'
-$badRange=ReadPage $admin '/admin/reports?from=2026-10-24&to=2026-10-01';Check ($badRange.StatusCode -eq 400 -and $badRange.Content -match 'Khoảng ngày không hợp lệ') 'invalid report range'
+foreach ($path in @('courses','topics','lesson','quiz','reports','ai-tutor')) {
+    Check ((ReadPage $admin ('/admin/'+$path)).StatusCode -eq 403) "admin system scope denies $path"
+}
+Check ((Post $admin '/admin/quiz' @{csrf=$adminCsrf;action='copy';id='newton-demo'}).StatusCode -eq 403) 'admin server mutation denied'
+$badRange=ReadPage $teacher '/teacher/progress?from=2026-10-24&to=2026-10-01'
+Check ($badRange.StatusCode -eq 400 -and $badRange.Content -match 'Khoảng ngày không hợp lệ') 'invalid report range'
 $csv=ReadPage $teacher '/teacher/progress?export=csv';Check ($csv.StatusCode -eq 200 -and $csv.Headers.'Content-Type' -like '*text/csv*') 'CSV download'
 # Complete real POST workflows against Tomcat; no browser-only mock handlers.
 $page=ReadPage $teacher '/teacher/ai-questions';$csrf=Token $page.Content
@@ -105,7 +101,7 @@ Check (([regex]::Matches($page.Content,'class="tutor-message ')).Count -eq 2) 't
 if($aiWasEnabled){$policyResult=Post $admin '/admin/ai-settings' @{csrf=(Token ((ReadPage $admin '/admin/ai-settings').Content));enabled='on';limit=$aiLimit};if($policyResult.StatusCode -ne 200){throw 'Failed to restore original AI enabled policy'};Check ($policyResult.StatusCode -eq 200) 'original AI policy restored'}
 }
 Check ((ReadPage $teacher ('/teacher/ai-tutor?id='+$conversation)).StatusCode -eq 404) 'teacher cannot read student conversation'
-Check ((ReadPage $admin ('/admin/ai-tutor?id='+$conversation)).StatusCode -eq 404) 'admin cannot read private conversation'
+Check ((ReadPage $admin ('/admin/ai-tutor?id='+$conversation)).StatusCode -eq 403) 'admin cannot read private conversation'
 $page=Post $student '/student/ai-tutor' @{csrf=$tutorCsrf;action='hide';id=$conversation}
 Check ($page.StatusCode -eq 200) 'tutor conversation soft hidden'
 Check ((ReadPage $student ('/student/ai-tutor?id='+$conversation)).StatusCode -eq 404) 'hidden conversation unavailable'

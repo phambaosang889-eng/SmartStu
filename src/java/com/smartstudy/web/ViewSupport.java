@@ -81,15 +81,17 @@ public final class ViewSupport {
         m.put("dashboard", "Tổng quan");
         if (u.getRole() == Role.ADMIN) {
             m.put("users", "Quản lý tài khoản");
-            m.put("teachers", "Giám sát giáo viên");
+            m.put("notifications", "Thông báo hệ thống");
+            m.put("ai-settings", "Cấu hình AI");
+            m.put("audit", "Nhật ký hệ thống");
+            m.put("settings", "Cài đặt hệ thống");
+            m.put("profile", "Hồ sơ cá nhân");
+            return m;
         }
-        m.put("courses", u.getRole() == Role.ADMIN ? "Kiểm duyệt khóa học" : "Khóa học");
-        m.put(
-                "lesson",
-                u.getRole() == Role.STUDENT
-                        ? "Bài học"
-                        : u.getRole() == Role.ADMIN ? "Giám sát học liệu" : "Quản lý bài học");
-        m.put("quiz", u.getRole() == Role.ADMIN ? "Giám sát quiz" : "Quiz");
+        m.put("courses", "Khóa học");
+        m.put("lesson", u.getRole() == Role.STUDENT ? "Bài học" : "Quản lý bài học");
+        m.put("quiz", "Quiz");
+        if (u.getRole() == Role.STUDENT) m.put("essays", "Bài tự luận");
         m.put("flashcards", "Flashcard");
         if (u.getRole() == Role.TEACHER) {
             m.put("resources", "Tài liệu / video");
@@ -104,17 +106,9 @@ public final class ViewSupport {
             m.put("formulas", "Công thức");
             m.put("mindmap", "Sơ đồ tư duy");
             m.put("resources", "Tài liệu");
-            m.put("essays", "Bài tự luận");
             m.put("notifications", "Thông báo");
         }
-        m.put(u.getRole() == Role.ADMIN ? "reports" : "progress", "Tiến độ & kết quả");
-        if (u.getRole() == Role.ADMIN) {
-            m.put("topics", "Danh mục và chủ đề");
-            m.put("notifications", "Thông báo hệ thống");
-            m.put("ai-settings", "Cấu hình AI");
-            m.put("audit", "Nhật ký hệ thống");
-            m.put("settings", "Cài đặt");
-        }
+        m.put("progress", "Tiến độ & kết quả");
         m.put("ai-tutor", "Trợ lý học tập");
         m.put("profile", "Hồ sơ cá nhân");
         return m;

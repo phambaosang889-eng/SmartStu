@@ -97,7 +97,7 @@ public final class AccountController {
                     .setAttribute(
                             "flash",
                             "Đã cập nhật. Trạng thái và vai trò được kiểm tra lại ở mỗi yêu cầu"
-                                + " truy cập.");
+                                    + " truy cập.");
             resp.sendRedirect(req.getContextPath() + "/" + ViewSupport.role(u) + "/" + p);
         } catch (IllegalArgumentException e) {
             req.setAttribute(

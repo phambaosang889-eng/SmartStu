@@ -25,7 +25,7 @@ public final class AIQuestionGeneratorService {
                                             "Khối lượng của vật",
                                             "Thời gian chuyển động",
                                             "Gia tốc a = Δv/Δt đặc trưng cho tốc độ biến thiên của"
-                                                + " vận tốc."
+                                                    + " vận tốc."
                                         },
                                         {
                                             "Trong chuyển động thẳng đều, gia tốc bằng bao nhiêu?",
@@ -53,7 +53,7 @@ public final class AIQuestionGeneratorService {
                                             "Giảm một nửa",
                                             "Không đổi",
                                             "Wđ = ½mv². Với m không đổi, v tăng 2 lần làm v² tăng 4"
-                                                + " lần."
+                                                    + " lần."
                                         }
                                     };
                             default ->
@@ -65,17 +65,17 @@ public final class AIQuestionGeneratorService {
                                             "Tăng tốc",
                                             "Đổi hướng",
                                             "Định luật I Newton: hợp lực bằng 0 thì vận tốc không"
-                                                + " đổi."
+                                                    + " đổi."
                                         },
                                         {
                                             "Lực và phản lực trong định luật III Newton đặt lên"
-                                                + " đâu?",
+                                                    + " đâu?",
                                             "Cùng một vật",
                                             "Hai vật khác nhau",
                                             "Chỉ lên vật nặng hơn",
                                             "Không tác dụng lên vật",
                                             "Hai lực cùng độ lớn, ngược chiều và đặt lên hai vật"
-                                                + " tương tác khác nhau."
+                                                    + " tương tác khác nhau."
                                         }
                                     };
                         };

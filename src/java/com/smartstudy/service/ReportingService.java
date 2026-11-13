@@ -192,7 +192,7 @@ public final class ReportingService {
         StringBuilder s =
                 new StringBuilder(
                         "\uFEFFKhóa học,Giáo viên,Đang học,Đã hoàn thành,Tiến độ trung bình"
-                            + " (%),Điểm quiz trung bình,Tự luận chờ công bố\r\n");
+                                + " (%),Điểm quiz trung bình,Tự luận chờ công bố\r\n");
         for (CourseRow r : rows)
             s.append(csv(r.title()))
                     .append(',')

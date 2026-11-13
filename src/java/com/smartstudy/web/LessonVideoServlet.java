@@ -82,7 +82,7 @@ public final class LessonVideoServlet extends HttpServlet {
             req.setAttribute(
                     "videoError",
                     "Không lưu được file video. Kiểm tra dung lượng và thư mục lưu trên máy chủ,"
-                        + " rồi thử lại.");
+                            + " rồi thử lại.");
             req.getRequestDispatcher("/WEB-INF/views/common/video-error.jsp").forward(req, resp);
         }
     }

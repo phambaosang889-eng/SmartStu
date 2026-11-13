@@ -3,7 +3,6 @@ package com.smartstudy.service;
 import com.smartstudy.model.Question;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /** Shared question bank with durable ownership, revisions and archive state. */
 public final class QuestionBankService {
@@ -49,7 +48,7 @@ public final class QuestionBankService {
                         new Question(
                                 null,
                                 "Khi hợp lực tác dụng lên vật bằng 0, vật đang chuyển động sẽ thế"
-                                    + " nào?",
+                                        + " nào?",
                                 List.of(
                                         "Dừng lại ngay",
                                         "Tiếp tục thẳng đều",
@@ -57,7 +56,7 @@ public final class QuestionBankService {
                                         "Đổi hướng liên tục"),
                                 1,
                                 "Theo định luật I Newton, hợp lực bằng 0 thì vật giữ nguyên trạng"
-                                    + " thái chuyển động.",
+                                        + " thái chuyển động.",
                                 safeTopic,
                                 "Thông hiểu",
                                 1,

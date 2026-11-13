@@ -1,0 +1,54 @@
+<%@ page pageEncoding="UTF-8" import="com.smartstudy.service.EssayTutor" %>
+<% if (student) {
+    var exchanges = (List<EssayTutor.Exchange>) request.getAttribute("essayTutorHistory");
+    boolean tutorReady = Boolean.TRUE.equals(request.getAttribute("essayTutorReady"));
+%>
+    <section class="surface" id="essay-tutor" aria-labelledby="essay-tutor-title">
+        <h2 id="essay-tutor-title">Hỏi trợ lý về bài làm của bạn</h2>
+        <p class="muted">
+            Hỏi vì sao một bước bị sai, cách đổi đơn vị hoặc cách sửa lời giải. Trao đổi này chỉ
+            hiển thị trong phiên đăng nhập của bạn.
+        </p>
+
+        <% if (request.getAttribute("essayTutorError") != null) { %>
+            <div class="notice error" role="alert"><%=ViewSupport.h(request.getAttribute("essayTutorError"))%></div>
+        <% } %>
+        <% if (!exchanges.isEmpty()) { %>
+            <div class="tutor-messages" aria-label="Trao đổi về bài làm" tabindex="0">
+                <% for (var exchange : exchanges) { %>
+                    <article class="tutor-message from-user">
+                        <strong>Bạn</strong>
+                        <div class="tutor-text"><%=ViewSupport.h(exchange.question())%></div>
+                    </article>
+                    <article class="tutor-message from-tutor">
+                        <strong>Trợ lý học tập</strong>
+                        <div class="tutor-text" data-rich-answer><%=ViewSupport.h(exchange.answer())%></div>
+                    </article>
+                <% } %>
+            </div>
+        <% } %>
+
+        <% if (tutorReady) { %>
+            <form class="tutor-composer tutor-send" method="post" action="<%=base%>/essays#essay-tutor">
+                <input type="hidden" name="csrf" value="<%=ViewSupport.csrf(request)%>">
+                <input type="hidden" name="action" value="ask-essay-tutor">
+                <input type="hidden" name="submission" value="<%=ViewSupport.h(submission.id())%>">
+                <label for="tutor-message">Câu hỏi của bạn</label>
+                <textarea id="tutor-message" name="question" rows="3" required
+                    maxlength="<%=EssayTutor.QUESTION_LIMIT%>"
+                    placeholder="Ví dụ: Vì sao bước tính gia tốc của mình sai?"><%=ViewSupport.h(request.getAttribute("essayTutorDraft"))%></textarea>
+                <div class="tutor-compose-actions">
+                    <small>Enter để gửi · Shift+Enter để xuống dòng</small>
+                    <button class="button primary" type="submit">Gửi câu hỏi</button>
+                </div>
+                <p class="tutor-loading" role="status" hidden>Trợ lý đang xem bài làm và soạn câu trả lời…</p>
+                <p class="field-help">Chỉ hỏi về nội dung bài làm và tránh nhập thông tin cá nhân.</p>
+            </form>
+        <% } else if (request.getAttribute("essayTutorError") == null) { %>
+            <p class="notice">Trợ lý AI đang tạm thời chưa khả dụng. Bạn vẫn có thể xem lại bài và nhận xét ở trên.</p>
+        <% } %>
+    </section>
+    <script src="${pageContext.request.contextPath}/assets/vendor/katex/katex.min.js" defer></script>
+    <script src="${pageContext.request.contextPath}/assets/js/tutor-format.js?v=20261028-escaped-lines-2" defer></script>
+    <script src="${pageContext.request.contextPath}/assets/js/tutor.js?v=20261030-utf8" charset="UTF-8" defer></script>
+<% } %>

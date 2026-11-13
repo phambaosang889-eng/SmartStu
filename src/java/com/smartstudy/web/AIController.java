@@ -19,6 +19,8 @@ public final class AIController {
         }
         var ai = AIService.getInstance();
         req.setAttribute("aiProvider", ai.providerLabel());
+        req.setAttribute("aiModel", ai.model());
+        req.setAttribute("aiProviderType", ai.provider());
         req.setAttribute(
                 "aiStatus",
                 new com.smartstudy.model.view.AIStatus(
@@ -41,6 +43,21 @@ public final class AIController {
             return true;
         }
         try {
+            if ("update-key".equals(req.getParameter("action"))) {
+                AIService.getInstance()
+                        .updateKey(u, req.getParameter("keyProvider"), req.getParameter("apiKey"));
+                req.getSession()
+                        .setAttribute(
+                                "flash",
+                                "Đã lưu cấu hình khóa AI. Thay đổi áp dụng cho yêu cầu mới; khóa"
+                                        + " không hiển thị lại trên trang.");
+                resp.sendRedirect(req.getContextPath() + "/admin/ai-settings");
+                return true;
+            }
+            if (req.getParameter("provider") != null)
+                AIService.getInstance().configureProvider(u, req.getParameter("provider"));
+            if (req.getParameter("model") != null)
+                AIService.getInstance().configureModel(u, req.getParameter("model"));
             AIService.getInstance()
                     .configure(
                             u,

@@ -176,7 +176,7 @@ public final class QuestionController {
                                                                                     g.text()))))
                         throw new IllegalArgumentException(
                                 "Câu tạo lại trùng bộ hiện tại. Hãy tạo bộ mới hoặc chỉnh sửa thủ"
-                                    + " công.");
+                                        + " công.");
                     updated.addAll(Math.min(pool.indexOf(original), updated.size()), generated);
                     req.getSession().setAttribute("generationOffset", offset + 1);
                 }
@@ -260,7 +260,7 @@ public final class QuestionController {
                         .setAttribute(
                                 "flash",
                                 "Đã sửa câu hỏi. Quiz đã lưu giữ nguyên bản câu hỏi tại thời điểm"
-                                    + " biên soạn.");
+                                        + " biên soạn.");
             } else if ("archive-question".equals(action) || "restore-question".equals(action)) {
                 if (bank.owned(actor).stream()
                         .noneMatch(q -> q.id().equals(req.getParameter("id"))))

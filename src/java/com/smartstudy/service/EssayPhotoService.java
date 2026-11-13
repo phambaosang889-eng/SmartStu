@@ -67,7 +67,7 @@ public final class EssayPhotoService {
         if (dao.used(u.getEmail()) + image.bytes().length > 50L * 1024 * 1024)
             throw new IllegalArgumentException(
                     "Đã đạt giới hạn lưu ảnh 50 MB. Gỡ các ảnh nháp không dùng hoặc liên hệ giáo"
-                        + " viên.");
+                            + " viên.");
         var photo =
                 new EssayPhoto(
                         UUID.randomUUID().toString(),
@@ -101,9 +101,17 @@ public final class EssayPhotoService {
     }
 
     public EssayPhoto scan(User u, String id) {
+        return scan(u, id, false);
+    }
+
+    public EssayPhoto scanForFeedback(User u, String id) {
+        return scan(u, id, true);
+    }
+
+    private EssayPhoto scan(User u, String id, boolean feedback) {
         EssayPhoto p = readable(u, id);
         if (p == null) throw new IllegalArgumentException("Không có quyền đọc ảnh này.");
-        if (u.getRole() == Role.STUDENT && p.submission() != null)
+        if (!feedback && u.getRole() == Role.STUDENT && p.submission() != null)
             throw new IllegalArgumentException("Ảnh đã nộp chỉ được giáo viên xử lý.");
         if (p.transcription() != null)
             return p; // Repeated clicks reuse the saved scan, no extra API cost.

@@ -50,6 +50,6 @@ public record AIQuestionRequest(
                 || extra.length() > 1500)
             throw new IllegalArgumentException(
                     "Kiểm tra phạm vi bài học, mục tiêu, độ khó, thời gian 15–600 giây và yêu cầu"
-                        + " bổ sung.");
+                            + " bổ sung.");
     }
 }

@@ -149,7 +149,7 @@ public final class CourseService {
         if (ch == null || !owns(u, ch.course()))
             throw new IllegalArgumentException(
                     "Chọn chương trong khóa học do bạn phụ trách. Nếu chưa có chương, tạo chương ở"
-                        + " trang khóa học trước.");
+                            + " trang khóa học trước.");
         if (order < 1 || order > 999) throw new IllegalArgumentException("Thứ tự từ 1–999.");
         url = url == null ? "" : url.trim();
         if (!url.isBlank()) {

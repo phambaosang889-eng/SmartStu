@@ -49,6 +49,9 @@ if($LiveAI){
  Check ($graded.Content -match 'F/m|F / m|chia|phép chia') 'feedback identifies the incorrect multiply/divide step'
 }
 $studentResult=GetPage $student ('/student/essays?submission='+$submission)
-Check (!$studentResult.Content.Contains('Đề xuất AI:') -and !$studentResult.Content.Contains('Kết quả giáo viên đã công bố')) 'AI grade remains private until teacher approval'
+Check (!$studentResult.Content.Contains('Kết quả giáo viên đã công bố')) 'AI feedback does not publish an official grade'
+if($LiveAI){
+ Check ($studentResult.Content.Contains('Điểm AI đề xuất:')) 'student can read AI feedback on their own photo submission'
+}
 @{photo=$photo;submission=$submission;liveAI=[bool]$LiveAI} | ConvertTo-Json | Set-Content (Join-Path $root '.runtime/essay-photo-qa-result.json') -Encoding utf8
 Write-Output "PASS $script:checks essay-photo HTTP checks. Synthetic submission retained for visual review: $submission"

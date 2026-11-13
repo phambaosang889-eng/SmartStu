@@ -57,7 +57,7 @@ public final class EssayPhotoDao {
                     try (var s =
                             c.prepareStatement(
                                     "SELECT COALESCE(SUM(byte_size),0) FROM essay_photos WHERE"
-                                        + " student_email=?")) {
+                                            + " student_email=?")) {
                         s.setString(1, user);
                         try (var r = s.executeQuery()) {
                             r.next();
@@ -108,7 +108,7 @@ public final class EssayPhotoDao {
                     try (var s =
                             c.prepareStatement(
                                     "DELETE FROM essay_photos WHERE id=? AND student_email=? AND"
-                                        + " submission_id IS NULL")) {
+                                            + " submission_id IS NULL")) {
                         s.setString(1, id);
                         s.setString(2, user);
                         return s.executeUpdate() == 1;
@@ -122,7 +122,7 @@ public final class EssayPhotoDao {
                     try (var s =
                             c.prepareStatement(
                                     "UPDATE essay_photos SET submission_id=? WHERE student_email=?"
-                                        + " AND assignment_id=? AND submission_id IS NULL")) {
+                                            + " AND assignment_id=? AND submission_id IS NULL")) {
                         s.setString(1, submission);
                         s.setString(2, user);
                         s.setString(3, assignment);
@@ -138,8 +138,8 @@ public final class EssayPhotoDao {
                     try (var s =
                             c.prepareStatement(
                                     "UPDATE essay_photos SET"
-                                        + " ocr_text=?,ocr_warning=?,ocr_confidence=? WHERE"
-                                        + " id=?")) {
+                                            + " ocr_text=?,ocr_warning=?,ocr_confidence=? WHERE"
+                                            + " id=?")) {
                         s.setString(1, reading.text());
                         s.setString(2, reading.warning());
                         s.setDouble(3, reading.confidence());

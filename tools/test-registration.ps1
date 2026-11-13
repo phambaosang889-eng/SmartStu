@@ -4,7 +4,7 @@ function Check($ok,$label){$script:checks++;if(!$ok){throw "FAIL: $label"}}
 function Token($page){[regex]::Match($page.Content,'name="csrf" value="([^"]+)"').Groups[1].Value}
 function Post($session,$path,$body){Invoke-WebRequest ($BaseUrl+$path) -Method Post -WebSession $session -Body $body -ContentType 'application/x-www-form-urlencoded; charset=UTF-8' -SkipHttpErrorCheck}
 $login=Invoke-WebRequest ($BaseUrl+'/login') -SessionVariable session
-Check ($login.Content -match '/register">Tạo tài khoản học sinh') 'login links to registration'
+Check ($login.Content -match '/register">\s*Tạo\s+tài\s+khoản\s+học\s+sinh') 'login links to registration'
 $page=Invoke-WebRequest ($BaseUrl+'/register') -WebSession $session
 Check ($page.StatusCode -eq 200 -and $page.Content -match 'name="confirmPassword"') 'registration page available to visitors'
 $csrf=Token $page;$email='register-'+[Guid]::NewGuid().ToString('N')+'@smartstu.test';$password='Local-Registration-QA-2026!'

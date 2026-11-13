@@ -63,7 +63,7 @@ public class AuthServlet extends HttpServlet {
                 if (selectedRole != null && !"STUDENT".equals(selectedRole))
                     throw new IllegalArgumentException(
                             "Đăng ký trực tuyến chỉ dành cho học sinh. Tài khoản giáo viên do quản"
-                                + " trị viên cấp.");
+                                    + " trị viên cấp.");
                 UserStore.registerStudent(
                         req.getParameter("name"),
                         req.getParameter("email"),
@@ -73,7 +73,7 @@ public class AuthServlet extends HttpServlet {
                         .setAttribute(
                                 "authNotice",
                                 "Tạo tài khoản thành công. Chọn Học sinh và đăng nhập bằng tài"
-                                    + " khoản vừa tạo.");
+                                        + " khoản vừa tạo.");
                 resp.sendRedirect(req.getContextPath() + "/login");
             } catch (IllegalArgumentException e) {
                 req.setAttribute("registrationError", e.getMessage());

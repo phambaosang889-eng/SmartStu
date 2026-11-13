@@ -101,7 +101,7 @@ public final class EssayPhotoServlet extends HttpServlet {
                             "flash",
                             "scan".equals(action)
                                     ? "Đã đọc ảnh. Hãy đối chiếu nội dung nhận dạng với bài viết"
-                                          + " trước khi sử dụng."
+                                            + " trước khi sử dụng."
                                     : "Đã cập nhật ảnh bài làm.");
             resp.sendRedirect(destination);
         } catch (IllegalArgumentException e) {

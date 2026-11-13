@@ -1,0 +1,44 @@
+<%@ page pageEncoding="UTF-8" %>
+<%
+    if (student) {
+        var feedback = com.smartstudy.service.EssayWorkflow.getInstance().studentSuggestion(submission.id(), viewer);
+        boolean autoFeedback = submission.id().equals(session.getAttribute("essayAutoFeedback"));
+        if (autoFeedback) session.removeAttribute("essayAutoFeedback");
+%>
+    <section class="surface" aria-label="Phản hồi AI">
+        <h2>AI nhận xét bài làm</h2>
+        <% if (feedback != null) { %>
+            <div class="notice">
+                <b>Điểm AI đề xuất: <%=feedback.total()%>/<%=a.maximum()%></b><span>Giáo viên có thể điều chỉnh. Điểm chính thức nằm ở kết quả giáo viên công bố.</span>
+            </div>
+            <% for (int criterion = 0; criterion < a.rubric().size(); criterion++) { %>
+                <div class="activity-row">
+                    <b><%=ViewSupport.h(a.rubric().get(criterion).title())%></b><span><%=feedback.scores().get(criterion)%>/<%=a.rubric().get(criterion).max()%></span>
+                </div>
+            <% } %>
+            <h3>Phân tích và cách sửa từng bước</h3>
+            <div class="prose"><%=ViewSupport.h(feedback.feedback())%></div>
+            <p class="field-help">
+                Độ tin cậy AI: <%=Math.round(feedback.confidence()*100)%>%. Hãy trao đổi với giáo viên nếu nhận xét chưa phù hợp.
+            </p>
+        <% } else { %>
+            <p>
+                Bài nộp đã được lưu. AI sẽ đọc bài và hướng dẫn sửa theo rubric; nếu dịch vụ lỗi, bạn có thể thử lại hoặc chờ giáo viên chấm.
+            </p>
+            <form method="post" action="<%=base%>/essays" id="student-feedback-form">
+                <input type="hidden" name="csrf" value="<%=ViewSupport.csrf(request)%>">
+                <input type="hidden" name="action" value="student-feedback">
+                <input type="hidden" name="submission" value="<%=submission.id()%>">
+                <button class="button primary" type="submit">Nhận phản hồi AI</button>
+                <p role="status" id="feedback-loading" hidden>AI đang đọc và chấm bài, vui lòng chờ…</p>
+            </form>
+            <script>
+    (() => {
+        const form = document.getElementById('student-feedback-form');
+        form.addEventListener('submit', () => { document.getElementById('feedback-loading').hidden = false; });
+        <% if (autoFeedback) { %>form.requestSubmit();<% } %>
+    })();
+    </script>
+        <% } %>
+    </section>
+<% } %>

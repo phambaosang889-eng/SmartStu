@@ -89,7 +89,7 @@ public final class CourseController {
                     .setAttribute(
                             "flash",
                             "Đã cập nhật khóa học. Nội dung chỉ đến học sinh khi khóa học được"
-                                + " duyệt và xuất bản.");
+                                    + " duyệt và xuất bản.");
             resp.sendRedirect(dest + (id == null || id.isBlank() ? "" : "?id=" + id));
         } catch (IllegalArgumentException ex) {
             req.setAttribute(

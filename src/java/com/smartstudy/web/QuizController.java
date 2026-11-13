@@ -110,7 +110,7 @@ public final class QuizController {
                         .setAttribute(
                                 "flash",
                                 "Đã lưu quiz. Học sinh chỉ thấy quiz đã phát hành trong khóa học đã"
-                                    + " tham gia.");
+                                        + " tham gia.");
             } else throw new IllegalArgumentException("Thao tác không hợp lệ.");
             resp.sendRedirect(dest);
         } catch (IllegalArgumentException ex) {

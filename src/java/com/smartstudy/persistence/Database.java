@@ -33,7 +33,14 @@ public final class Database {
         return value;
     }
 
+    private static java.nio.file.Path privateConfig;
     private static final java.util.Properties LOCAL = loadConfig();
+
+    public static java.nio.file.Path aiSecretsFile() {
+        return privateConfig == null
+                ? null
+                : privateConfig.resolveSibling("ai-secrets.local.properties");
+    }
 
     private static java.util.Properties loadConfig() {
         var p = new java.util.Properties();
@@ -75,14 +82,14 @@ public final class Database {
         }
         if (path != null && !path.isBlank())
             try (var in = java.nio.file.Files.newInputStream(java.nio.file.Path.of(path))) {
+                privateConfig = java.nio.file.Path.of(path).toAbsolutePath().normalize();
                 p.load(in);
             } catch (java.io.IOException e) {
                 throw new IllegalStateException("Không đọc được cấu hình bên ngoài ứng dụng.", e);
             }
         if (localWorkspace)
-            p.remove(
-                    "SMARTSTU_DB_JNDI"); // This resource belongs to the separate test Tomcat, not
-                                         // NetBeans.
+            p.remove("SMARTSTU_DB_JNDI"); // This resource belongs to the separate test Tomcat, not
+        // NetBeans.
         return p;
     }
 
@@ -177,7 +184,7 @@ public final class Database {
         public StorageException(Throwable cause) {
             super(
                     "Không thể lưu hoặc đọc dữ liệu. Vui lòng thử lại; nếu lỗi tiếp diễn hãy liên"
-                        + " hệ quản trị viên.",
+                            + " hệ quản trị viên.",
                     cause);
         }
     }
